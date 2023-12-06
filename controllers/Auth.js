@@ -1,8 +1,7 @@
 const bcrypt = require("bcrypt");
-const connection=require("../config/mysqlConnection");
+const userModel = require("../models/userModels");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const userModel = require("../models/userModels");
 //signup route handler
 exports.signup = async (req, res) => {
     try {
