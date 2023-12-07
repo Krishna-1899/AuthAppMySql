@@ -1,5 +1,5 @@
 const userModel = require("../../services/UserModels");
-const validation=require("../../validation/validation");
+const validation=require("../../validation/Validation");
 const Utils=require("../../utils/Utils");
 const Response=require("../../utils/Response");
 require("dotenv").config();

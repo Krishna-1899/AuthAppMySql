@@ -1,6 +1,6 @@
 const userModel = require("../../services/UserModels");
 const Utils=require("../../utils/Utils");
-const { validationOfInputFields } = require("../../validation/validation");
+const { validationOfInputFields } = require("../../validation/Validation");
 const Response=require("../../utils/Response");
 require("dotenv").config();
 // handler for login
