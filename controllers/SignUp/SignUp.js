@@ -1,4 +1,4 @@
-const userModel = require("../../services/userModels");
+const userModel = require("../../services/UserModels");
 const validation=require("../../validation/validation");
 const Utils=require("../../utils/Utils");
 const Response=require("../../utils/Response");

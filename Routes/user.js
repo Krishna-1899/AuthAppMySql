@@ -12,7 +12,7 @@ router.post("/signup",signup);
 router.get("/getAllUsers",getAllUsers);
 router.get("/getUserById",getUserByID);
 router.put("/updateUserById",updateUserById);
-router.delete("/deleteUserById",deleteUserById);
+router.delete("/deleteUserById",auth,isadmin,deleteUserById);
 // testing route for single  middleware
 router.get("/test",auth,(req,res)=>{ 
     res.json({

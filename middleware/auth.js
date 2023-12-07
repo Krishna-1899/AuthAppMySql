@@ -27,7 +27,7 @@ exports.auth=(req,res,next)=>{
 }
 exports.isstudent=(req,res,next)=>{
     try{
-        if(req.user.role !== "Student" ){
+        if(req.user.role !== 1 ){
             return Response.sendFailed(res,"this is protected route for student");
         }
         next();
@@ -37,7 +37,7 @@ exports.isstudent=(req,res,next)=>{
 }
 exports.isadmin=(req,res,next)=>{
     try{
-        if(req.user.role !== "Admin" ){
+        if(req.user.role !== 2 ){
             return Response.sendFailed(res,"this is protected route for admin");
         }
         next();

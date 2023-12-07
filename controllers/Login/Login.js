@@ -1,4 +1,4 @@
-const userModel = require("../../services/userModels");
+const userModel = require("../../services/UserModels");
 const Utils=require("../../utils/Utils");
 const { validationOfInputFields } = require("../../validation/validation");
 const Response=require("../../utils/Response");
@@ -25,7 +25,7 @@ exports.login = async (req, res) => {
             const payload = {
                 email: user.email,
                 id: user.id,
-                role: user.role,
+                role: user.role_id,
             };
             //verfy password and generate jwt token
             if (await Utils.verifyPassword(password,user.password)) {
