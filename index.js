@@ -1,7 +1,7 @@
 const express = require('express');
 const app= express();
 require('dotenv').config();
-const connection  = require("./config/mysqlConnection");
+const connection  = require("./config/MysqlConnection");
 connection.connect(function(err){
     if (err) throw err;
     console.log("Connected!");

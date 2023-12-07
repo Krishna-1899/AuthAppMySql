@@ -1,66 +1,47 @@
 //auth,isstudent,isadmin
 const jwt=require("jsonwebtoken");
 require("dotenv").config();
+const Utils=require("../utils/Utils");
+const Response=require("../utils/Response");
 exports.auth=(req,res,next)=>{
     try{
         //extract jwt token
         const token=req.body.token;
         if(!token){
-            return res.status(401).json({
-                success:false,
-                message:"token missing"
-            });
+            return Response.sendNotFound(res,"Token missing");
         };
         //verify token
         try{ 
-            const decode = jwt.verify(token,process.env.JWT_SECRET);
+            const decode = Utils.verifyJwtToken(token);
             console.log(decode);
             req.user=decode;
         }
         catch(err){ 
-            return res.status(401).json({
-                success:false,
-                message:"token invalid"
-            });
+            return Response.sendFailed(res,"Token invalid");
         };
         next();
     }
     catch(error){
-        return res.status(401).json({
-            success:false,
-            message:"something went wrong while varifying the token"
-        });
+        return Response.sendFailed(res,"something went wrong while varifying the token");
     }
 }
 exports.isstudent=(req,res,next)=>{
     try{
         if(req.user.role !== "Student" ){
-            return res.status(401).json({
-                success:false,
-                message:"this is protected route for student"
-            });
+            return Response.sendFailed(res,"this is protected route for student");
         }
         next();
     }catch(err){
-        return res.status(500).json({
-            success:false,
-            message:"user role cannot is not matching"
-        });
+        return Response.sendFailed(res,"user role is not matching");
     };
 }
 exports.isadmin=(req,res,next)=>{
     try{
         if(req.user.role !== "Admin" ){
-            return res.status(401).json({
-                success:false,
-                message:"this is protected route for admin"
-            });
+            return Response.sendFailed(res,"this is protected route for admin");
         }
         next();
     }catch(err){
-        return res.status(500).json({
-            success:false,
-            message:"user role cannot is not matching"
-        });
+        return Response.sendFailed(res,"user role is not matching");
     };
 }
