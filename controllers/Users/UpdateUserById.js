@@ -1,8 +1,6 @@
 const userModel = require("../../services/UserModels");
 const Response=require("../../utils/Response");
 const Utils=require("../../utils/Utils");
-const jwt=require("jsonwebtoken");
-const { validationOfInputFields, areAllNotEmpty } = require("../../validation/Validation");
 require("dotenv").config();
 exports.updateUserById=async(req,res)=>{
     const {name,email,role_id,token}=req.body;
