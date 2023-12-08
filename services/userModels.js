@@ -1,5 +1,6 @@
 // models/userModel.js
 const connection = require('../config/MysqlConnection');
+const { verifyEmail, areAllNotEmpty } = require('../validation/Validation');
 function getAllUsers(callback) {
   connection.query('SELECT * FROM users;', (error, results) => {
     if (error) throw error;
@@ -39,16 +40,28 @@ function createUser(name,email,password,role_id, callback) {
     });
   });
 }
-function updateUser(userId, name,role_id,callback) {
-  const updatedUser={
-    name:name,
-    role_id:role_id,
-    updatedAt:new Date(),
-  };
-  connection.query('UPDATE users SET ? WHERE id = ?', [updatedUser, userId], (error) => {
-    if (error){
-      console.error('error in updatng user table',error);
-      return error;
+function updateUser(userId, name, email, role_id, callback) {
+  const updateFields = {};
+
+  if (name !== undefined) updateFields.name = name;
+  if (email !== undefined && verifyEmail(email)) updateFields.email = email;
+  if (role_id !== undefined) updateFields.role_id = role_id;
+
+  if (!areAllNotEmpty(updateFields)) {
+    callback("Not Valid Input")
+  }
+
+  updateFields.updatedAt = new Date();
+
+  const updateQuery = `UPDATE users SET ${Object.keys(updateFields)
+    .map((field) => `${field} = ?`)
+    .join(', ')} WHERE id = ?`;
+
+  const values = [...Object.values(updateFields), userId];
+  connection.query(updateQuery, values, (error) => {
+    if (error) {
+      console.error('Error updating user table', error);
+      callback(error.message);
     }
     callback();
   });
