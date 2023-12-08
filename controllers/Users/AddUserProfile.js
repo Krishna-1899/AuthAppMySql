@@ -24,5 +24,6 @@ exports.addUserProfile=async(req,res)=>{
         }
     }catch(error){
         console.log(error);
+        return Response.sendFailed(res,error.message);
     }
 }

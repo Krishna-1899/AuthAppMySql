@@ -1,7 +1,7 @@
 const userModel = require("../../services/UserModels");
 const Response=require("../../utils/Response");
 const Utils=require("../../utils/Utils");
-const { validationOfInputFields, areAllNotEmpty } = require("../../validation/Validation");
+const { validationOfInputFields, areAllNotEmpty, verifyEmail } = require("../../validation/Validation");
 require("dotenv").config();
 exports.updateUserById=async(req,res)=>{
     const {name,email,role}=req.body;
@@ -9,12 +9,13 @@ exports.updateUserById=async(req,res)=>{
     console.log("id from req.user",id);
     try{
         userModel.getUserById(id,(user)=>{
-            console.log("user fetched by id ",user);
             if(user){
+                if(!verifyEmail(email)) return Response.invalidInput(res,"Invalid Email ")
                 userModel.getUserByEmail(email,(result)=>{
                     if(result){
                         return Response.sendFailed(res, "Email Already exists");
                     }
+                    
                     const userDetails={
                         name:name,
                         email:email,

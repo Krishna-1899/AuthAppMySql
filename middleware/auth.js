@@ -14,7 +14,6 @@ exports.auth=(req,res,next)=>{
         //verify token
         try{ 
             const decode = Utils.verifyJwtToken(token);
-            console.log(decode);
             req.user=decode;
         }
         catch(err){ 
