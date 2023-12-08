@@ -40,23 +40,22 @@ function createUser(name,email,password,role_id, callback) {
     });
   });
 }
-function updateUser(userId, name, email, role_id, callback) {
+function updateUser(userId,userDetails,callback) {
+  console.log(userDetails);
   const updateFields = {};
-
-  if (name !== undefined) updateFields.name = name;
-  if (email !== undefined && verifyEmail(email)) updateFields.email = email;
-  if (role_id !== undefined) updateFields.role_id = role_id;
-
+  if ( userDetails.name !== undefined) updateFields.name = userDetails.name;
+  if ( userDetails.email !== undefined && verifyEmail(userDetails.email)) updateFields.email = userDetails.email;
+  if ( userDetails.role_id !== undefined) updateFields.role_id = userDetails.role_id;
+  if(userDetails.path !== undefined) updateFields.profileImage=userDetails.path;
+  console.log(updateFields);
   if (!areAllNotEmpty(updateFields)) {
     callback("Not Valid Input")
   }
-
   updateFields.updatedAt = new Date();
 
   const updateQuery = `UPDATE users SET ${Object.keys(updateFields)
     .map((field) => `${field} = ?`)
     .join(', ')} WHERE id = ?`;
-
   const values = [...Object.values(updateFields), userId];
   connection.query(updateQuery, values, (error) => {
     if (error) {

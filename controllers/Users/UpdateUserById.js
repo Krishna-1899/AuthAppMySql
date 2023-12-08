@@ -12,7 +12,12 @@ exports.updateUserById=async(req,res)=>{
             if(result){
                 return Response.sendFailed(res, "Email Already exists");
             }
-            userModel.updateUser(id, name, email, role_id,()=>{
+            const userDetails={
+                name:name,
+                email:email,
+                role_id:role_id
+            }
+            userModel.updateUser(id,userDetails,()=>{
                 Response.sendCreated(res, "User updated successfully");
             });
         });

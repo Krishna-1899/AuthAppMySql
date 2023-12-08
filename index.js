@@ -1,6 +1,14 @@
 const express = require('express');
 const app= express();
 require('dotenv').config();
+
+const fileUpload=require("express-fileupload");
+app.use(fileUpload({
+        useTempFiles:true,
+        tempFileDir:'/tmp'
+    })
+); 
+
 const connection  = require("./config/MysqlConnection");
 connection.connect(function(err){
     if (err) throw err;

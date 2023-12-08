@@ -6,7 +6,9 @@ const Response=require("../utils/Response");
 exports.auth=(req,res,next)=>{
     try{
         //extract jwt token
-        const token=req.body.token;
+        console.log('Headers:', req.headers);
+        const token = req.header("Authorization").replace("Bearer ","")    
+        console.log("token",token);
         if(!token){
             return Response.sendNotFound(res,"Token missing");
         };
