@@ -1,27 +1,39 @@
 const userModel = require("../../services/UserModels");
 const Response=require("../../utils/Response");
 const Utils=require("../../utils/Utils");
+const { validationOfInputFields, areAllNotEmpty } = require("../../validation/Validation");
 require("dotenv").config();
 exports.updateUserById=async(req,res)=>{
-    const {name,email,role_id,token}=req.body;
+    const {name,email,role}=req.body;
+    const id=req.user.id;
+    console.log("id from req.user",id);
     try{
-        const decode = Utils.verifyJwtToken(token, process.env.JWT_SECRET);
-        const id = decode.id;
-        userModel.getUserByEmail(email,(result)=>{
-            console.log(result);
-            if(result){
-                return Response.sendFailed(res, "Email Already exists");
+        userModel.getUserById(id,(user)=>{
+            console.log("user fetched by id ",user);
+            if(user){
+                userModel.getUserByEmail(email,(result)=>{
+                    if(result){
+                        return Response.sendFailed(res, "Email Already exists");
+                    }
+                    const userDetails={
+                        name:name,
+                        email:email,
+                        role_id:role
+                    }
+
+                    userModel.updateUser(id,userDetails,(value)=>{
+                        if(value){
+                            return Response.invalidInput(res,"Invalid Input")
+                        }
+                        return Response.sendCreated(res, "User updated successfully");
+                    });
+                });
             }
-            const userDetails={
-                name:name,
-                email:email,
-                role_id:role_id
+            else{
+                return Response.sendNotFound(res,"User Not Found");
             }
-            userModel.updateUser(id,userDetails,()=>{
-                Response.sendCreated(res, "User updated successfully");
-            });
-        });
+        })
     }catch(error){
-        Response.sendFailed(res, "Token invalid");
+        Response.sendFailed(res, "Some thing went wrong when updating the user details");
     }
 }

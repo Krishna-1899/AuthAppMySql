@@ -6,6 +6,11 @@ exports.getUserByID=async(req,res)=>{
         return Response.invalidInput(res,"Invalid Id");
     }
     userModel.getUserById(id,(user)=>{
-        Response.sendSuccess(res,user);
+        if(user){
+            return Response.sendSuccess(res,user);
+        }
+        else{
+            return Response.sendNotFound(res,"User not found")
+        }
     });
 }

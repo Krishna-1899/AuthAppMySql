@@ -23,14 +23,12 @@ exports.signup = async (req, res) => {
         async function createNewUser(name,email,password,role_id){
             //hashed the password
             const newPassword=await Utils.hashedPassword(password);
-            console.log(newPassword);
-            //caling the model function to insert the data to table
+            //caling the function to insert the data to table
             userModel.createUser(name,email,password=newPassword,role_id,(data)=>{
                 return Response.sendCreated(res,"New User SignUp",data)
             });
         }
     } catch (error) {
-        console.error(error);
         return Response.sendFailed(res,"User cannot br registered");
     }
 };

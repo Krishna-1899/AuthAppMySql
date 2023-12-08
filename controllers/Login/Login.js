@@ -3,12 +3,13 @@ const Utils=require("../../utils/Utils");
 const { validationOfInputFields } = require("../../validation/Validation");
 const Response=require("../../utils/Response");
 require("dotenv").config();
-// handler for login
+
+
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (validationOfInputFields(email,password)){
-            return Response.invalidInput(res,"Enter all details");
+            return Response.invalidInput(res,"Email and Password is invalid");
         };
         // retriving the data form table on basis of email and password
         userModel.getUserByEmail(email,(user) => {
@@ -41,9 +42,6 @@ exports.login = async (req, res) => {
         }
     } catch (err) {
         console.log(err);
-        return res.status(500).json({
-        success: false,
-        message: "login failure",
-        });
+        return Response.sendFailed(res,"Login Failure")
     }
 };

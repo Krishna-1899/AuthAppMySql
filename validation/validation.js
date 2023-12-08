@@ -17,15 +17,12 @@ function areAllNotEmpty(...values) {
     // Check if all values are not undefined, not null, and not empty strings
     return values.every(value => {
       if (typeof value === 'object' && value !== null) {
-        // If the value is an object, check all its values
         return Object.values(value).every(innerValue => innerValue !== undefined && innerValue !== null && innerValue !== '');
       } else {
-        // Otherwise, check the value itself
         return value !== undefined && value !== null && value !== '';
       }
     });
 }
-  
 module.exports={
     areAllNotEmpty,
     verifyEmail,

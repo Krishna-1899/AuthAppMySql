@@ -13,7 +13,7 @@ router.post("/login",login);
 router.post("/signup",signup);
 router.get("/getAllUsers",getAllUsers);
 router.get("/getUserById",getUserByID);
-router.put("/updateUserById",updateUserById);
+router.put("/updateUserById",auth,updateUserById);
 router.delete("/deleteUserById",auth,isadmin,deleteUserById);
 router.post("/addUserProfile",auth,addUserProfile);
 // testing route for single  middleware
