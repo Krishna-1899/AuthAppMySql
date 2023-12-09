@@ -1,7 +1,10 @@
 //email validation
 function verifyEmail(email){
-    const emailRegx=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegx.test(email);
+    if(email){
+      const emailRegx=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegx.test(email);
+    }
+    return true;
 }
 
 //password validator 

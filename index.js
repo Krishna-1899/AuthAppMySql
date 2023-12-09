@@ -9,7 +9,7 @@ app.use(fileUpload({
     })
 ); 
 
-const connection  = require("./config/MysqlConnection");
+const connection  = require("./config/mysqlConnection");
 connection.connect(function(err){
     if (err) throw err;
     console.log("Connected!");
@@ -20,7 +20,6 @@ connection.query(`SHOW DATABASES`,function(err,result){
     else
         console.log("Result: ", result)
 });
-
 const PORT = process.env.PORT || 4000;
 app.use(express.json());
 

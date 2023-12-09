@@ -8,7 +8,7 @@ const {updateUserById}=require("../controllers/Users/UpdateUserById");
 const {deleteUserById}=require("../controllers/Users/DeleteUserById");
 const {addUserProfile}=require("../controllers/Users/AddUserProfile");
 const {auth,isstudent,isadmin}=require("../middleware/auth");
-
+const { changeUserPassword } = require("../controllers/Users/ChangeUserpassword");
 router.post("/login",login);
 router.post("/signup",signup);
 router.get("/getAllUsers",getAllUsers);
@@ -16,6 +16,7 @@ router.get("/getUserById",getUserByID);
 router.put("/updateUserById",auth,updateUserById);
 router.delete("/deleteUserById",auth,isadmin,deleteUserById);
 router.post("/addUserProfile",auth,addUserProfile);
+router.put("/changeUserPassword",auth,changeUserPassword);
 // testing route for single  middleware
 router.get("/test",auth,(req,res)=>{ 
     res.json({
