@@ -2,6 +2,7 @@ const userModel = require("../../services/UserModels");
 const Response=require("../../utils/Response");
 exports.getUserByID=async(req,res)=>{
     const {id}=req.body;
+    console.log(id);
     if(!id){
         return Response.invalidInput(res,"Invalid Id");
     }
