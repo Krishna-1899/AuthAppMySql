@@ -1,10 +1,10 @@
 // models/userModel.js
-const connection = require('../config/MysqlConnection');
+const connection = require('../config/mysqlConnection');
 const { verifyEmail, areAllNotEmpty } = require('../validation/Validation');
 function getAllUsers(callback) {
   connection.query('SELECT * FROM users;', (error, results) => {
-    if (error) throw error;
-    callback(results);
+  if (error) throw error;
+  callback(results);
   });
 }
 function getUserById(userId, callback) {
@@ -18,11 +18,11 @@ function getUserById(userId, callback) {
   });
 }
 function getUserByEmail(email,callback){
-    const query = `SELECT * FROM users WHERE email=?`;
-    connection.query(query,[email],(error,results)=>{
-        if (error) throw error;
-        callback(results[0]);
-    });
+  const query = `SELECT * FROM users WHERE email=?`;
+  connection.query(query,[email],(error,results)=>{
+if (error) throw error;
+callback(results[0]);
+});
 }
 function createUser(name,email,password,role_id, callback) {
   const insertUser = `
@@ -44,26 +44,32 @@ function createUser(name,email,password,role_id, callback) {
 }
 function updateUser(userId,userDetails,callback) {
   console.log("user details ",userDetails);
-  let ValidInput = false;
   const updateFields = {};
   if (userDetails.name !== undefined && userDetails.name !=='' && userDetails.name!==null) updateFields.name = userDetails.name;
   if (userDetails.email !== undefined && userDetails.email !=='' && userDetails.email!==null && verifyEmail(userDetails.email)) updateFields.email = userDetails.email;
+  if (userDetails.password !==undefined && userDetails.password !== '' && userDetails.password!==null) updateFields.password=userDetails.password;
   if (userDetails.role_id !== undefined && userDetails.role_id !=='' && userDetails.role_id !==null && (userDetails.role_id==1||userDetails.role_id==2)) updateFields.role_id = userDetails.role_id;
-  if (userDetails.path !== undefined && userDetails.path!=='' && userDetails.path!==null) updateFields.profileImage=userDetails.path;
-  if(Object.values(updateFields).length){
-    updateFields.updatedAt = new Date();
-    const updateQuery = `UPDATE users SET ${Object.keys(updateFields).map((field) => `${field} = ?`).join(', ')} WHERE id = ?`;
-    const values = [...Object.values(updateFields), userId];
-    connection.query(updateQuery, values, (error) => {
-      if (error) {
-        console.error('Error updating user table', error);
-        callback(error.message);
-      }
-      callback();
-    });
-  }
-  else{
-    callback("Not Valid Input");
+  if (userDetails.path !== undefined && userDetails.path!=='' && userDetails.path!==null) updateFields.profilePath=userDetails.path;
+  try{
+    if(Object.values(updateFields).length){
+      updateFields.updatedAt = new Date();
+      const updateQuery = `UPDATE users SET ${Object.keys(updateFields).map((field) => `${field} = ?`).join(', ')} WHERE id = ?`;
+      const values = [...Object.values(updateFields), userId];
+      connection.query(updateQuery, values, (error) => {
+        if (error) {
+          console.error('Error updating user table', error.message);
+          callback(error.message);
+        }else{
+          callback();
+        }
+      });
+    }
+    else{
+      callback("Not Valid Input");
+    }
+  }catch(err){
+    console.log("printing form catch block",err.mesage);
+    callback(err.message);
   }
 }
 function deleteUser(userId, callback) {

@@ -8,23 +8,29 @@ exports.deleteUserById=async(req,res)=>{
     if(!id){
         return Response.invalidInput(res,"user is not found");
     }
-    userModel.getUserById(id,(user)=>{
-        console.log(user);
-        if(user){
-            const path=user.profileImage;
-    
-            userModel.deleteUser(id,()=>{
+    try{
+        userModel.getUserById(id,(user)=>{
+            console.log(user);
+            if(user){
+                const path=user.profilePath;
+                {
+                    path && userModel.deleteUser(id,()=>{
+                        fs.remove(path)
+                        .then(() => {
+                            console.log('success!');
+                        })
+                        .catch(err => {
+                            return Response.sendFailed(res,err.message);
+                        })
+                    });
+                }
                 Response.sendSuccess(res,"User deleted successfully");
-            });
-            if(path){
-               fs.remove(path,err=>{
-                if (err) return console.error(err)
-               }) 
             }
-        }
-        else{
-            return Response.invalidInput(res,"user is not found");
-        }
-        
-    })
+            else{
+                return Response.invalidInput(res,"user is not found");
+            }
+        })
+    }catch(err){
+        return Response.sendFailed(res,err.message);
+    }
 }
